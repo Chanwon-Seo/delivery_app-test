@@ -28,7 +28,6 @@ public class LikedController {
             @AuthenticationPrincipal AuthenticationUser user,
             @PathVariable final Long storeId
     ) {
-
         storeLikedService.addLiked(user, storeId);
         return ResponseEntity.status(StatusCode.OK.code)
                 .body(RestApiResponse.of("관심 매장으로 등록되었습니다."));

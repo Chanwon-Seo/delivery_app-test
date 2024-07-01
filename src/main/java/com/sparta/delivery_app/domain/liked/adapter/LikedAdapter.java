@@ -15,6 +15,21 @@ public class LikedAdapter {
 
     private final StoreLikedRepository storeLikedRepository;
 
+    /**
+     * QueryDsl
+     */
+    public boolean existsQueryUserByStoreAndUser(Store store, User user) {
+        return storeLikedRepository.existsQueryByStoreAndUser(store, user);
+    }
+
+    public StoreLiked searchQueryLikedByStoreAndUser(Store store, User user) {
+        return storeLikedRepository.searchQueryLikedByStoreAndUser(store, user).orElseThrow(() ->
+                new LikedNotFoundException(LikedErrorCode.LIKED_UNREGISTERED_ERROR));
+    }
+
+    /**
+     * JPA
+     */
     public void saveLiked(StoreLiked storeLiked) {
         storeLikedRepository.save(storeLiked);
     }
@@ -28,17 +43,10 @@ public class LikedAdapter {
                 new LikedNotFoundException(LikedErrorCode.LIKED_UNREGISTERED_ERROR));
     }
 
-    /**
-     * JPA
-     */
+
     public boolean existsByStoreAndUser(Store store, User user) {
         return storeLikedRepository.existsByStoreAndUser(store, user);
     }
 
-    /**
-     * QueryDsl
-     */
-    public boolean existsQueryUserByStoreAndUser(Store store, User user) {
-        return storeLikedRepository.existsQueryByStoreAndUser(store, user);
-    }
+
 }

@@ -39,14 +39,11 @@ public class StoreLikedService {
 
     @Transactional
     public void deleteLiked(AuthenticationUser user, final Long storeId) {
-        Store store = storeAdapter.queryStoreById(storeId);
-        User findUser = userAdapter.queryUserByEmailAndStatus(user.getUsername());
+        User findUser = userAdapter.searchQueryUserByEmailAndStatus(user.getUsername());
+        Store store = storeAdapter.searchQueryStoreById(storeId);
 
-        if (!likedAdapter.existsByStoreAndUser(store, findUser)) {
-            throw new LikedNotFoundException(LikedErrorCode.LIKED_UNREGISTERED_ERROR);
-        }
+        StoreLiked storeLiked = likedAdapter.searchQueryLikedByStoreAndUser(store, findUser);
 
-        StoreLiked findStoreLiked = likedAdapter.queryLikedByStoreId(storeId);
-        likedAdapter.deleteLiked(findStoreLiked);
+        likedAdapter.deleteLiked(storeLiked);
     }
 }
