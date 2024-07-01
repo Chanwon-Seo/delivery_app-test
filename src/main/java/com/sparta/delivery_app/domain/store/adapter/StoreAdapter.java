@@ -22,6 +22,17 @@ public class StoreAdapter {
 
     private final StoreRepository storeRepository;
 
+    /**
+     * QueryDsl
+     */
+    public Store searchQueryStoreById(Long storeId) {
+        return storeRepository.searchQueryById(storeId).orElseThrow(() ->
+                new StoreNotFoundException(StoreErrorCode.INVALID_STORE));
+    }
+
+    /**
+     * JPA
+     */
     public Store queryStoreById(Long storeId) {
         return storeRepository.findById(storeId).orElseThrow(() ->
                 new StoreNotFoundException(StoreErrorCode.INVALID_STORE));

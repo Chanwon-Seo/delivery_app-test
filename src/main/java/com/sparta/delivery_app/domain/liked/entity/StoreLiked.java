@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Liked {
+public class StoreLiked {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,8 +27,15 @@ public class Liked {
     private User user;
 
     @Builder
-    public Liked(Store store, User user) {
+    public StoreLiked(Store store, User user) {
         this.store = store;
         this.user = user;
+    }
+
+    public static StoreLiked saveStoreLiked(Store store, User user) {
+        return StoreLiked.builder()
+                .store(store)
+                .user(user)
+                .build();
     }
 }

@@ -5,7 +5,7 @@ import com.sparta.delivery_app.common.globalcustomexception.LikedDuplicatedExcep
 import com.sparta.delivery_app.common.globalcustomexception.LikedNotFoundException;
 import com.sparta.delivery_app.common.security.AuthenticationUser;
 import com.sparta.delivery_app.domain.liked.adapter.LikedAdapter;
-import com.sparta.delivery_app.domain.liked.entity.Liked;
+import com.sparta.delivery_app.domain.liked.entity.StoreLiked;
 import com.sparta.delivery_app.domain.store.adapter.StoreAdapter;
 import com.sparta.delivery_app.domain.store.entity.Store;
 import com.sparta.delivery_app.domain.user.adapter.UserAdapter;
@@ -18,35 +18,32 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class LikedService {
+public class StoreLikedService {
 
-    private final LikedAdapter likedAdapter;
     private final StoreAdapter storeAdapter;
     private final UserAdapter userAdapter;
+    private final LikedAdapter likedAdapter;
+
 
     public void addLiked(AuthenticationUser user, final Long storeId) {
+        User findUser = userAdapter.searchQueryUserByEmailAndStatus(user.getUsername());
+        Store store = storeAdapter.searchQueryStoreById(storeId);
 
-        Store store = storeAdapter.queryStoreById(storeId);
-        User findUser = userAdapter.queryUserByEmailAndStatus(user.getUsername());
-
-        if (likedAdapter.existsByStoreAndUser(store, findUser)) {
+        if (likedAdapter.existsQueryUserByStoreAndUser(store, findUser)) {
             throw new LikedDuplicatedException(LikedErrorCode.LIKED_ALREADY_REGISTERED_ERROR);
         }
 
-        Liked liked = new Liked(store, findUser);
-        likedAdapter.saveLiked(liked);
+        StoreLiked storeLiked = StoreLiked.saveStoreLiked(store, findUser);
+        likedAdapter.saveLiked(storeLiked);
     }
 
     @Transactional
     public void deleteLiked(AuthenticationUser user, final Long storeId) {
-        Store store = storeAdapter.queryStoreById(storeId);
-        User findUser = userAdapter.queryUserByEmailAndStatus(user.getUsername());
+        User findUser = userAdapter.searchQueryUserByEmailAndStatus(user.getUsername());
+        Store store = storeAdapter.searchQueryStoreById(storeId);
 
-        if (!likedAdapter.existsByStoreAndUser(store, findUser)) {
-            throw new LikedNotFoundException(LikedErrorCode.LIKED_UNREGISTERED_ERROR);
-        }
+        StoreLiked storeLiked = likedAdapter.searchQueryLikedByStoreAndUser(store, findUser);
 
-        Liked findLiked = likedAdapter.queryLikedByStoreId(storeId);
-        likedAdapter.deleteLiked(findLiked);
+        likedAdapter.deleteLiked(storeLiked);
     }
 }
