@@ -37,11 +37,22 @@ public class UserAdapter {
     }
 
     /**
+     * JPA
      * 특정 email 조회
      * Status
      */
     public User queryUserByEmailAndStatus(String email) {
         User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotExistException(NOT_SIGNED_UP_USER));
+        UserStatus.checkUserStatus(user.getUserStatus());
+        return user;
+    }
+
+    /**
+     * QueryDsl
+     */
+    public User searchQueryUserByEmailAndStatus(String email) {
+        User user = userRepository.searchQueryByEmail(email)
                 .orElseThrow(() -> new UserNotExistException(NOT_SIGNED_UP_USER));
         UserStatus.checkUserStatus(user.getUserStatus());
         return user;
