@@ -5,8 +5,10 @@ import com.sparta.delivery_app.common.globalcustomexception.LikedDuplicatedExcep
 import com.sparta.delivery_app.common.security.AuthenticationUser;
 import com.sparta.delivery_app.domain.commen.page.util.PageUtil;
 import com.sparta.delivery_app.domain.liked.adapter.LikedAdapter;
+import com.sparta.delivery_app.domain.liked.dto.response.LikesMenuResponseDto;
 import com.sparta.delivery_app.domain.liked.dto.response.LikesResponseDto;
 import com.sparta.delivery_app.domain.liked.entity.StoreLiked;
+import com.sparta.delivery_app.domain.liked.repository.dto.LikedMenuWithUserDto;
 import com.sparta.delivery_app.domain.liked.repository.dto.LikedWithUserVO;
 import com.sparta.delivery_app.domain.store.adapter.StoreAdapter;
 import com.sparta.delivery_app.domain.store.entity.Store;
@@ -61,4 +63,18 @@ public class StoreLikedService {
         return LikesResponseDto.of(likedWithUserDto);
     }
 
+    @Transactional(readOnly = true)
+    public LikesMenuResponseDto likedMenuPage(AuthenticationUser user, Integer pageNum, Long storeId) {
+        User findUser = userAdapter.searchQueryUserByEmailAndStatus(user.getUsername());
+        Store findStore = storeAdapter.searchQueryStoreById(storeId);
+
+        if (!likedAdapter.existsQueryUserByStoreAndUser(findStore, findUser)) {
+            throw new LikedDuplicatedException(LikedErrorCode.LIKED_UNREGISTERED_ERROR);
+        }
+
+        Pageable pageable = PageUtil.createPageable(pageNum, PageUtil.PAGE_SIZE_FIVE, Boolean.TRUE);
+        Page<LikedMenuWithUserDto> likedMenuWithUserVO = likedAdapter.searchQueryLikedMenuWithUserAndStoreAndMenuPage(findUser, findStore, pageable);
+
+        return LikesMenuResponseDto.of(likedMenuWithUserVO);
+    }
 }

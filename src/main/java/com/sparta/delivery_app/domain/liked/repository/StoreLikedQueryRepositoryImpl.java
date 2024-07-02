@@ -4,7 +4,10 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.delivery_app.domain.liked.entity.StoreLiked;
+import com.sparta.delivery_app.domain.liked.repository.dto.LikedMenuWithUserDto;
 import com.sparta.delivery_app.domain.liked.repository.dto.LikedWithUserVO;
+import com.sparta.delivery_app.domain.liked.repository.dto.MenuVO;
+import com.sparta.delivery_app.domain.menu.entity.MenuStatus;
 import com.sparta.delivery_app.domain.store.entity.Store;
 import com.sparta.delivery_app.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -14,10 +17,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static com.sparta.delivery_app.domain.liked.entity.QStoreLiked.storeLiked;
+import static com.sparta.delivery_app.domain.menu.entity.QMenu.menu;
 import static com.sparta.delivery_app.domain.store.entity.QStore.store;
 import static com.sparta.delivery_app.domain.user.entity.QUser.user;
 
@@ -68,6 +73,57 @@ public class StoreLikedQueryRepositoryImpl implements StoreLikedQueryRepository 
                 );
 
         return PageableExecutionUtils.getPage(likes, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public Page<LikedMenuWithUserDto> searchQueryLikedMenuWithUserAndStoreAndMenuByUser(User findUser, Store findStore, Pageable pageable) {
+        Store searchStore = jpaQueryFactory
+                .selectFrom(store)
+                .where(
+                        store.id.eq(findStore.getId())
+                )
+                .fetchOne();
+
+        List<MenuVO> menuList = jpaQueryFactory
+                .select(Projections.constructor(
+                        MenuVO.class,
+                        menu.id,
+                        menu.menuName,
+                        menu.menuInfo,
+                        menu.menuPrice,
+                        menu.menuImagePath
+
+                ))
+                .from(storeLiked)
+                .join(user).on(storeLiked.user.eq(user))
+                .join(store).on(storeLiked.store.eq(store))
+                .join(menu).on(store.eq(menu.store))
+                .where(
+                        storeLiked.user.id.eq(findUser.getId()),
+                        store.id.eq(findStore.getId()),
+                        menu.menuStatus.eq(MenuStatus.ENABLE)
+                )
+                .orderBy(menu.createdAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        JPAQuery<Long> countQuery = jpaQueryFactory
+                .select(menu.count())
+                .from(storeLiked)
+                .join(user).on(storeLiked.user.eq(user))
+                .join(store).on(storeLiked.store.eq(store))
+                .join(menu).on(store.eq(menu.store))
+                .where(
+                        storeLiked.user.id.eq(findUser.getId()),
+                        store.id.eq(findStore.getId()),
+                        menu.menuStatus.eq(MenuStatus.ENABLE)
+                );
+
+        LikedMenuWithUserDto likedMenuWithUserDto = LikedMenuWithUserDto.of(searchStore, menuList);
+        List<LikedMenuWithUserDto> likedMenuWithUserDtos = Collections.singletonList(likedMenuWithUserDto);
+
+        return PageableExecutionUtils.getPage(likedMenuWithUserDtos, pageable, countQuery::fetchOne);
     }
 
     private StoreLiked query(Store store, User user) {
