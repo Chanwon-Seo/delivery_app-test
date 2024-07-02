@@ -4,7 +4,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.delivery_app.domain.liked.entity.StoreLiked;
-import com.sparta.delivery_app.domain.liked.repository.dto.LikedWithUserDto;
+import com.sparta.delivery_app.domain.liked.repository.dto.LikedWithUserVO;
 import com.sparta.delivery_app.domain.store.entity.Store;
 import com.sparta.delivery_app.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -39,10 +39,10 @@ public class StoreLikedQueryRepositoryImpl implements StoreLikedQueryRepository 
         return Optional.ofNullable(query(store, user));
     }
 
-    public Page<LikedWithUserDto> searchQueryLikedWithUserAndStoreByUser(User findUser, Pageable pageable) {
-        List<LikedWithUserDto> likes = jpaQueryFactory
+    public Page<LikedWithUserVO> searchQueryLikedWithUserAndStoreByUser(User findUser, Pageable pageable) {
+        List<LikedWithUserVO> likes = jpaQueryFactory
                 .select(Projections.constructor(
-                        LikedWithUserDto.class,
+                        LikedWithUserVO.class,
                         store.id,
                         store.storeName,
                         store.storeAddress

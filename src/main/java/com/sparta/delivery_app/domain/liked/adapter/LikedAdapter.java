@@ -4,9 +4,12 @@ import com.sparta.delivery_app.common.exception.errorcode.LikedErrorCode;
 import com.sparta.delivery_app.common.globalcustomexception.LikedNotFoundException;
 import com.sparta.delivery_app.domain.liked.entity.StoreLiked;
 import com.sparta.delivery_app.domain.liked.repository.StoreLikedRepository;
+import com.sparta.delivery_app.domain.liked.repository.dto.LikedWithUserVO;
 import com.sparta.delivery_app.domain.store.entity.Store;
 import com.sparta.delivery_app.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -25,6 +28,10 @@ public class LikedAdapter {
     public StoreLiked searchQueryLikedByStoreAndUser(Store store, User user) {
         return storeLikedRepository.searchQueryLikedByStoreAndUser(store, user).orElseThrow(() ->
                 new LikedNotFoundException(LikedErrorCode.LIKED_UNREGISTERED_ERROR));
+    }
+
+    public Page<LikedWithUserVO> searchQueryLikedWithUserAndStorePage(User user, Pageable pageable) {
+        return storeLikedRepository.searchQueryLikedWithUserAndStoreByUser(user, pageable);
     }
 
     /**

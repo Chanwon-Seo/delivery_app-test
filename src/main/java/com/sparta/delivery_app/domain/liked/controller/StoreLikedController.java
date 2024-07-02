@@ -3,6 +3,7 @@ package com.sparta.delivery_app.domain.liked.controller;
 import com.sparta.delivery_app.common.globalResponse.RestApiResponse;
 import com.sparta.delivery_app.common.security.AuthenticationUser;
 import com.sparta.delivery_app.common.status.StatusCode;
+import com.sparta.delivery_app.domain.liked.dto.response.LikesResponseDto;
 import com.sparta.delivery_app.domain.liked.service.StoreLikedService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users/liked")
-public class LikedController {
+public class StoreLikedController {
 
     private final StoreLikedService storeLikedService;
 
@@ -23,7 +24,7 @@ public class LikedController {
      * 좋아요 등록
      */
     @PreAuthorize("hasRole('CONSUMER')")
-    @PostMapping("/{storeId}")
+    @PostMapping("/stores/{storeId}")
     public ResponseEntity<RestApiResponse<Object>> likedAdd(
             @AuthenticationPrincipal AuthenticationUser user,
             @PathVariable final Long storeId
@@ -37,7 +38,7 @@ public class LikedController {
      * 좋아요 삭제
      */
     @PreAuthorize("hasRole('CONSUMER')")
-    @DeleteMapping("/{storeId}")
+    @DeleteMapping("/stores/{storeId}")
     public ResponseEntity<RestApiResponse<Object>> likedDelete(
             @AuthenticationPrincipal AuthenticationUser user,
             @PathVariable final Long storeId
@@ -45,6 +46,19 @@ public class LikedController {
         storeLikedService.deleteLiked(user, storeId);
         return ResponseEntity.status(StatusCode.OK.code)
                 .body(RestApiResponse.of("관심 매장 등록이 취소되었습니다."));
+    }
 
+    /**
+     * 관심 매장 페이징 조회
+     */
+    @PreAuthorize("hasRole('CONSUMER')")
+    @GetMapping("/stores")
+    public ResponseEntity<RestApiResponse<Object>> likedPage(
+            @AuthenticationPrincipal AuthenticationUser user,
+            @RequestParam(value = "pageNum", required = false, defaultValue = "1") final Integer pageNum
+    ) {
+        LikesResponseDto responseDto = storeLikedService.findLikes(user, pageNum);
+        return ResponseEntity.status(StatusCode.OK.code)
+                .body(RestApiResponse.of(responseDto));
     }
 }
