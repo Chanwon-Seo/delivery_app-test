@@ -3,6 +3,7 @@ package com.sparta.delivery_app.domain.liked.controller;
 import com.sparta.delivery_app.common.globalResponse.RestApiResponse;
 import com.sparta.delivery_app.common.security.AuthenticationUser;
 import com.sparta.delivery_app.common.status.StatusCode;
+import com.sparta.delivery_app.domain.liked.dto.response.LikesMenuResponseDto;
 import com.sparta.delivery_app.domain.liked.dto.response.LikesResponseDto;
 import com.sparta.delivery_app.domain.liked.service.StoreLikedService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class StoreLikedController {
      */
     @PreAuthorize("hasRole('CONSUMER')")
     @PostMapping("/stores/{storeId}")
-    public ResponseEntity<RestApiResponse<Object>> likedAdd(
+    public ResponseEntity<RestApiResponse<String>> likedAdd(
             @AuthenticationPrincipal AuthenticationUser user,
             @PathVariable final Long storeId
     ) {
@@ -39,7 +40,7 @@ public class StoreLikedController {
      */
     @PreAuthorize("hasRole('CONSUMER')")
     @DeleteMapping("/stores/{storeId}")
-    public ResponseEntity<RestApiResponse<Object>> likedDelete(
+    public ResponseEntity<RestApiResponse<String>> likedDelete(
             @AuthenticationPrincipal AuthenticationUser user,
             @PathVariable final Long storeId
     ) {
@@ -53,11 +54,23 @@ public class StoreLikedController {
      */
     @PreAuthorize("hasRole('CONSUMER')")
     @GetMapping("/stores")
-    public ResponseEntity<RestApiResponse<Object>> likedPage(
+    public ResponseEntity<RestApiResponse<LikesResponseDto>> likedPage(
             @AuthenticationPrincipal AuthenticationUser user,
             @RequestParam(value = "pageNum", required = false, defaultValue = "1") final Integer pageNum
     ) {
         LikesResponseDto responseDto = storeLikedService.findLikes(user, pageNum);
+        return ResponseEntity.status(StatusCode.OK.code)
+                .body(RestApiResponse.of(responseDto));
+    }
+
+    @PreAuthorize("hasRole('CONSUMER')")
+    @GetMapping("/stores/{storeId}")
+    public ResponseEntity<RestApiResponse<LikesMenuResponseDto>> likedMenuPage(
+            @AuthenticationPrincipal AuthenticationUser user,
+            @RequestParam(value = "pageNum", required = false, defaultValue = "1") final Integer pageNum,
+            @PathVariable final Long storeId
+    ) {
+        LikesMenuResponseDto responseDto = storeLikedService.likedMenuPage(user, pageNum, storeId);
         return ResponseEntity.status(StatusCode.OK.code)
                 .body(RestApiResponse.of(responseDto));
     }

@@ -1,6 +1,6 @@
 package com.sparta.delivery_app;
 
-import com.sparta.delivery_app.domain.liked.entity.Liked;
+import com.sparta.delivery_app.domain.liked.entity.StoreLiked;
 import com.sparta.delivery_app.domain.menu.entity.Menu;
 import com.sparta.delivery_app.domain.menu.entity.MenuStatus;
 import com.sparta.delivery_app.domain.order.entity.Order;
@@ -432,7 +432,7 @@ public class TestDB {
 //            ManagerReviews managerReviews2 = ManagerReviews.builder()
 //                    .content("진상고객 우~~~")
 //                    .reviewsId(userReviews2.getId())
-//                    .user(manager1)
+//                    .name(manager1)
 //                    .managerReviewsStatus(ManagerReviewsStatus.ENABLE)
 //                    .build();
 //            save(managerReviews2);
@@ -440,17 +440,17 @@ public class TestDB {
             /**
              * 좋아요
              */
-            Liked liked1 = Liked.builder()
+            StoreLiked storeLiked1 = StoreLiked.builder()
                     .user(consumer)
                     .store(store1)
                     .build();
-            save(liked1);
+            save(storeLiked1);
 
-            Liked liked2 = Liked.builder()
-                    .user(consumer)
-                    .store(store1)
-                    .build();
-            save(liked2);
+//            StoreLiked storeLiked2 = StoreLiked.builder()
+//                    .name(con)
+//                    .store(store1)
+//                    .build();
+//            save(storeLiked2);
 
             /**
              *

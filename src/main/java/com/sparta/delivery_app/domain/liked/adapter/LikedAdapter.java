@@ -4,6 +4,7 @@ import com.sparta.delivery_app.common.exception.errorcode.LikedErrorCode;
 import com.sparta.delivery_app.common.globalcustomexception.LikedNotFoundException;
 import com.sparta.delivery_app.domain.liked.entity.StoreLiked;
 import com.sparta.delivery_app.domain.liked.repository.StoreLikedRepository;
+import com.sparta.delivery_app.domain.liked.repository.dto.LikedMenuWithUserDto;
 import com.sparta.delivery_app.domain.liked.repository.dto.LikedWithUserVO;
 import com.sparta.delivery_app.domain.store.entity.Store;
 import com.sparta.delivery_app.domain.user.entity.User;
@@ -34,6 +35,10 @@ public class LikedAdapter {
         return storeLikedRepository.searchQueryLikedWithUserAndStoreByUser(user, pageable);
     }
 
+    public Page<LikedMenuWithUserDto> searchQueryLikedMenuWithUserAndStoreAndMenuPage(User findUser, Store findStore, Pageable pageable) {
+        return storeLikedRepository.searchQueryLikedMenuWithUserAndStoreAndMenuByUser(findUser, findStore, pageable);
+    }
+
     /**
      * JPA
      */
@@ -54,6 +59,4 @@ public class LikedAdapter {
     public boolean existsByStoreAndUser(Store store, User user) {
         return storeLikedRepository.existsByStoreAndUser(store, user);
     }
-
-
 }

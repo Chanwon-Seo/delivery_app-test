@@ -1,6 +1,7 @@
 package com.sparta.delivery_app.domain.liked.repository;
 
 import com.sparta.delivery_app.domain.liked.entity.StoreLiked;
+import com.sparta.delivery_app.domain.liked.repository.dto.LikedMenuWithUserDto;
 import com.sparta.delivery_app.domain.liked.repository.dto.LikedWithUserVO;
 import com.sparta.delivery_app.domain.store.entity.Store;
 import com.sparta.delivery_app.domain.user.entity.User;
@@ -15,4 +16,6 @@ public interface StoreLikedQueryRepository {
     Optional<StoreLiked> searchQueryLikedByStoreAndUser(Store store, User findUser);
 
     Page<LikedWithUserVO> searchQueryLikedWithUserAndStoreByUser(User user, Pageable pageable);
+
+    Page<LikedMenuWithUserDto> searchQueryLikedMenuWithUserAndStoreAndMenuByUser(User findUser, Store findStore, Pageable pageable);
 }
