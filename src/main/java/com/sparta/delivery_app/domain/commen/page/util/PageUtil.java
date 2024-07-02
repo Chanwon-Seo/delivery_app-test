@@ -11,6 +11,7 @@ public class PageUtil {
     public static final Integer PAGE_SIZE_FIVE = 5;
     public static final Integer PAGE_SIZE_TEN = 10;
     public static final String NO_ELEMENT_MESSAGE = "조회된 데이터가 없습니다.";
+    private static final String PROPERTIES = "createdAt";
 
     public static Pageable createPageable(Integer pageNum, Integer pageSize, Boolean isDesc) {
         if (pageNum < 1) {
@@ -18,7 +19,7 @@ public class PageUtil {
         }
 
         Sort.Direction direction = isDesc ? Sort.Direction.DESC : Sort.Direction.ASC;
-        Sort sort = Sort.by(direction, "createdAt");
+        Sort sort = Sort.by(direction, PROPERTIES);
 
         return PageRequest.of(pageNum - 1, pageSize, sort);
     }
