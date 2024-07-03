@@ -3,6 +3,7 @@ package com.sparta.delivery_app.domain.liked.controller;
 import com.sparta.delivery_app.common.globalResponse.RestApiResponse;
 import com.sparta.delivery_app.common.security.AuthenticationUser;
 import com.sparta.delivery_app.common.status.StatusCode;
+import com.sparta.delivery_app.domain.liked.dto.response.UserReviewLikedResponseDto;
 import com.sparta.delivery_app.domain.liked.service.UserReviewLikedService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,4 +47,19 @@ public class UserReviewLikedController {
         return ResponseEntity.status(StatusCode.OK.code)
                 .body(RestApiResponse.of("해당 댓글에 좋아요를 삭제하였습니다."));
     }
+
+    /**
+     * 리뷰 좋아요 목록 조회
+     */
+    @PreAuthorize("hasRole('CONSUMER')")
+    @GetMapping("/user-review")
+    public ResponseEntity<RestApiResponse<UserReviewLikedResponseDto>> likedDelete(
+            @AuthenticationPrincipal AuthenticationUser user,
+            @RequestParam(value = "pageNum", required = false, defaultValue = "1") final Integer pageNum
+    ) {
+        UserReviewLikedResponseDto userReviewLiked = userReviewLikedService.getUserReviewLiked(user, pageNum);
+        return ResponseEntity.status(StatusCode.OK.code)
+                .body(RestApiResponse.of(userReviewLiked));
+    }
+
 }
