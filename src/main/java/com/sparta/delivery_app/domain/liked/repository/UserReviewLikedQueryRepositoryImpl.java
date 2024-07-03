@@ -2,6 +2,8 @@ package com.sparta.delivery_app.domain.liked.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.delivery_app.domain.liked.entity.UserReviewLiked;
+import com.sparta.delivery_app.domain.review.entity.UserReviews;
+import com.sparta.delivery_app.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,9 +18,12 @@ public class UserReviewLikedQueryRepositoryImpl implements UserReviewLikedQueryR
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public boolean existsQueryUserReviewLikedByUserAndId(Long userReviewId) {
+    public boolean existsQueryUserReviewLikedByUserAndUserReviews(User user, UserReviews userReviews) {
         UserReviewLiked findUserReviewLiked = jpaQueryFactory.selectFrom(userReviewLiked)
-                .where(userReviewLiked.id.eq(userReviewId))
+                .where(
+                        userReviewLiked.user.eq(user),
+                        userReviewLiked.userReviews.eq(userReviews)
+                )
                 .fetchOne();
         return findUserReviewLiked != null;
     }
