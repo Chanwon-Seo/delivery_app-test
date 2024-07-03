@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 import static com.sparta.delivery_app.domain.liked.entity.QUserReviewLiked.userReviewLiked;
 
 @Slf4j
@@ -26,6 +28,14 @@ public class UserReviewLikedQueryRepositoryImpl implements UserReviewLikedQueryR
                 )
                 .fetchOne();
         return findUserReviewLiked != null;
+    }
+
+    @Override
+    public Optional<UserReviewLiked> searchQueryUserReviewLikedById(Long userReviewLikedId) {
+        return Optional.ofNullable(jpaQueryFactory.selectFrom(userReviewLiked)
+                .where(
+                        userReviewLiked.id.eq(userReviewLikedId)
+                ).fetchOne());
     }
 
 }

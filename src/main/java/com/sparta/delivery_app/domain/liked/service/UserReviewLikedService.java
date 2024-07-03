@@ -2,6 +2,7 @@ package com.sparta.delivery_app.domain.liked.service;
 
 import com.sparta.delivery_app.common.exception.errorcode.LikedErrorCode;
 import com.sparta.delivery_app.common.globalcustomexception.LikedDuplicatedException;
+import com.sparta.delivery_app.common.globalcustomexception.LikedNotFoundException;
 import com.sparta.delivery_app.common.security.AuthenticationUser;
 import com.sparta.delivery_app.domain.liked.adapter.UserReviewLikedAdapter;
 import com.sparta.delivery_app.domain.liked.entity.UserReviewLiked;
@@ -33,6 +34,13 @@ public class UserReviewLikedService {
 
         UserReviewLiked userReviewLiked = UserReviewLiked.saveUserReviewLiked(findUser, userReviews);
         userReviewLikedAdapter.saveUserReviewLiked(userReviewLiked);
+    }
+
+    public void deleteUserReviewLiked(AuthenticationUser user, Long userReviewLikedId) {
+        userAdapter.searchQueryUserByEmailAndStatus(user.getUsername());
+
+        UserReviewLiked findUserReviewLiked = userReviewLikedAdapter.searchQueryUserReviewLikedById(userReviewLikedId);
+        userReviewLikedAdapter.deleteUserReviewLiked(findUserReviewLiked);
     }
 
 }
