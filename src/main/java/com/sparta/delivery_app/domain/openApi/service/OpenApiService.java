@@ -4,6 +4,7 @@ package com.sparta.delivery_app.domain.openApi.service;
 import com.sparta.delivery_app.common.exception.errorcode.PageErrorCode;
 import com.sparta.delivery_app.common.globalcustomexception.OpenApiAccessDeniedException;
 import com.sparta.delivery_app.domain.commen.page.util.PageUtil;
+import com.sparta.delivery_app.domain.liked.repository.dto.LikedStoreTopVO;
 import com.sparta.delivery_app.domain.openApi.adapter.OpenApiAdapter;
 import com.sparta.delivery_app.domain.openApi.dto.ReviewPageResponseDto;
 import com.sparta.delivery_app.domain.openApi.dto.StoreDetailsResponseDto;
@@ -17,6 +18,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -27,6 +30,7 @@ public class OpenApiService {
 
     /**
      * 전체 매장 조회
+     *
      * @param pageNum
      * @param isDesc
      * @return
@@ -44,6 +48,7 @@ public class OpenApiService {
 
     /**
      * 특정 매장의 정보 조회
+     *
      * @param storeId
      * @return
      */
@@ -54,6 +59,7 @@ public class OpenApiService {
 
     /**
      * 전체 리뷰 조회
+     *
      * @param pageNum
      * @param isDesc
      * @return
@@ -72,9 +78,13 @@ public class OpenApiService {
      * 토큰 사용
      */
     public void useToken() {
-        if(!bucket.tryConsume(1)) {
+        if (!bucket.tryConsume(1)) {
             throw new OpenApiAccessDeniedException(PageErrorCode.UNABLE_TO_CONNECT);
         }
     }
 
+    public List<LikedStoreTopVO> topLikedStore(Integer topNum) {
+        return openApiAdapter.searchQueryTopLikedStore(topNum);
+
+    }
 }

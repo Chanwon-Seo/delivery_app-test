@@ -5,10 +5,12 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.delivery_app.domain.liked.entity.StoreLiked;
 import com.sparta.delivery_app.domain.liked.repository.dto.LikedMenuWithUserDto;
+import com.sparta.delivery_app.domain.liked.repository.dto.LikedStoreTopVO;
 import com.sparta.delivery_app.domain.liked.repository.dto.LikedWithUserVO;
 import com.sparta.delivery_app.domain.liked.repository.dto.MenuVO;
 import com.sparta.delivery_app.domain.menu.entity.MenuStatus;
 import com.sparta.delivery_app.domain.store.entity.Store;
+import com.sparta.delivery_app.domain.store.entity.StoreStatus;
 import com.sparta.delivery_app.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +25,7 @@ import java.util.Optional;
 
 import static com.sparta.delivery_app.domain.liked.entity.QStoreLiked.storeLiked;
 import static com.sparta.delivery_app.domain.menu.entity.QMenu.menu;
+import static com.sparta.delivery_app.domain.order.entity.QOrder.*;
 import static com.sparta.delivery_app.domain.store.entity.QStore.store;
 import static com.sparta.delivery_app.domain.user.entity.QUser.user;
 
@@ -124,6 +127,32 @@ public class StoreLikedQueryRepositoryImpl implements StoreLikedQueryRepository 
         List<LikedMenuWithUserDto> likedMenuWithUserDtos = Collections.singletonList(likedMenuWithUserDto);
 
         return PageableExecutionUtils.getPage(likedMenuWithUserDtos, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public List<LikedStoreTopVO> searchQueryTopLikedStore(Integer topNum) {
+        return jpaQueryFactory
+                .select(
+                        Projections.constructor(
+                                LikedStoreTopVO.class,
+                                store.storeName,
+                                store.storeInfo,
+                                store.minTotalPrice,
+                                store.storeAddress,
+                                storeLiked.count(),
+                                store.menuList.size(),
+                                order.count()
+                        ))
+                .from(storeLiked)
+                .join(store).on(storeLiked.store.eq(store))
+                .join(order).on(order.store.eq(store))
+                .groupBy(store.id)
+                .where(
+                        store.status.eq(StoreStatus.ENABLE)
+                )
+                .orderBy(storeLiked.count().desc())
+                .limit(topNum)
+                .fetch();
     }
 
     private StoreLiked query(Store store, User user) {
