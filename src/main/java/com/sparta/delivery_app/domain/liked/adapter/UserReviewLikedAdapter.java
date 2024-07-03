@@ -4,12 +4,13 @@ import com.sparta.delivery_app.common.exception.errorcode.LikedErrorCode;
 import com.sparta.delivery_app.common.globalcustomexception.LikedNotFoundException;
 import com.sparta.delivery_app.domain.liked.entity.UserReviewLiked;
 import com.sparta.delivery_app.domain.liked.repository.UserReviewLikedRepository;
+import com.sparta.delivery_app.domain.liked.repository.dto.UserReviewLikedVO;
 import com.sparta.delivery_app.domain.review.entity.UserReviews;
 import com.sparta.delivery_app.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -32,5 +33,9 @@ public class UserReviewLikedAdapter {
 
     public void deleteUserReviewLiked(UserReviewLiked findUserReviewLiked) {
         userReviewLikedRepository.delete(findUserReviewLiked);
+    }
+
+    public Page<UserReviewLikedVO> searchQueryUserReviewLikedByUser(User findUser, Pageable pageable) {
+        return userReviewLikedRepository.searchQueryUserReviewLikedByUser(findUser, pageable);
     }
 }
