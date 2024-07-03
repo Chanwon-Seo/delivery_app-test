@@ -12,25 +12,21 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class StoreLiked extends BaseTimeCreateEntity {
+public class StoreLiked extends Liked {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "liked_id")
+    @Column(name = "store_liked_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id", nullable = false)
     private Store store;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
     @Builder
     public StoreLiked(Store store, User user) {
+        super(user);
         this.store = store;
-        this.user = user;
     }
 
     public static StoreLiked saveStoreLiked(Store store, User user) {

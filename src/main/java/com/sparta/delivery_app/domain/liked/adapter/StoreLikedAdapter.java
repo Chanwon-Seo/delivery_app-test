@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class LikedAdapter {
+public class StoreLikedAdapter {
 
     private final StoreLikedRepository storeLikedRepository;
 
@@ -28,7 +28,7 @@ public class LikedAdapter {
 
     public StoreLiked searchQueryLikedByStoreAndUser(Store store, User user) {
         return storeLikedRepository.searchQueryLikedByStoreAndUser(store, user).orElseThrow(() ->
-                new LikedNotFoundException(LikedErrorCode.LIKED_UNREGISTERED_ERROR));
+                new LikedNotFoundException(LikedErrorCode.LIKED_UNREGISTERED_STORE));
     }
 
     public Page<LikedWithUserVO> searchQueryLikedWithUserAndStorePage(User user, Pageable pageable) {
@@ -52,7 +52,7 @@ public class LikedAdapter {
 
     public StoreLiked queryLikedByStoreId(Long storeId) {
         return storeLikedRepository.findByStoreId(storeId).orElseThrow(() ->
-                new LikedNotFoundException(LikedErrorCode.LIKED_UNREGISTERED_ERROR));
+                new LikedNotFoundException(LikedErrorCode.LIKED_UNREGISTERED_STORE));
     }
 
 

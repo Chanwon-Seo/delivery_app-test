@@ -16,6 +16,18 @@ public class UserReviewsAdapter {
     private final UserReviewsRepository userReviewsRepository;
 
     /**
+     * QueryDsl
+     */
+    public boolean existsQueryUserReviewById(Long reviewId) {
+        return userReviewsRepository.existsQueryByUserReviewId(reviewId);
+    }
+
+    public UserReviews searchQueryUserReviewById(Long userReviewId) {
+        return userReviewsRepository.searchQueryUserReviewById(userReviewId).orElseThrow(() ->
+                new ReviewNotFoundException(ReviewErrorCode.INVALID_REVIEW));
+    }
+
+    /**
      * 리뷰 등록
      */
     public void saveReview(UserReviews userReviews) {
@@ -28,7 +40,7 @@ public class UserReviewsAdapter {
     public UserReviews checkValidReviewByIdAndReviewStatus(Long reviewId) {
         UserReviews userReviews = findById(reviewId);
 
-        if(userReviews.getReviewStatus().equals(ReviewStatus.DISABLE)) {
+        if (userReviews.getReviewStatus().equals(ReviewStatus.DISABLE)) {
             throw new ReviewStatusException(ReviewErrorCode.DELETED_REVIEW);
         }
 
@@ -49,4 +61,5 @@ public class UserReviewsAdapter {
     public void deleteTempReview(UserReviews tempReview) {
         userReviewsRepository.delete(tempReview);
     }
+
 }
