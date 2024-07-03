@@ -1,7 +1,10 @@
 package com.sparta.delivery_app.domain.liked.entity;
 
 import com.sparta.delivery_app.domain.review.entity.UserReviews;
+import com.sparta.delivery_app.domain.user.dto.request.ConsumersSignupRequestDto;
 import com.sparta.delivery_app.domain.user.entity.User;
+import com.sparta.delivery_app.domain.user.entity.UserRole;
+import com.sparta.delivery_app.domain.user.entity.UserStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -27,4 +30,12 @@ public class UserReviewLiked extends Liked {
         super(user);
         this.userReviews = userReviews;
     }
+
+    public static UserReviewLiked saveUserReviewLiked(User user, UserReviews userReviews) {
+        return UserReviewLiked.builder()
+                .user(user)
+                .userReviews(userReviews)
+                .build();
+    }
+
 }
