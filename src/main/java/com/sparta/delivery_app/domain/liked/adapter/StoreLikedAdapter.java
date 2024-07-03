@@ -5,6 +5,7 @@ import com.sparta.delivery_app.common.globalcustomexception.LikedNotFoundExcepti
 import com.sparta.delivery_app.domain.liked.entity.StoreLiked;
 import com.sparta.delivery_app.domain.liked.repository.StoreLikedRepository;
 import com.sparta.delivery_app.domain.liked.repository.dto.LikedMenuWithUserDto;
+import com.sparta.delivery_app.domain.liked.repository.dto.LikedStoreTopVO;
 import com.sparta.delivery_app.domain.liked.repository.dto.LikedWithUserVO;
 import com.sparta.delivery_app.domain.store.entity.Store;
 import com.sparta.delivery_app.domain.user.entity.User;
@@ -12,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -37,6 +40,10 @@ public class StoreLikedAdapter {
 
     public Page<LikedMenuWithUserDto> searchQueryLikedMenuWithUserAndStoreAndMenuPage(User findUser, Store findStore, Pageable pageable) {
         return storeLikedRepository.searchQueryLikedMenuWithUserAndStoreAndMenuByUser(findUser, findStore, pageable);
+    }
+
+    public List<LikedStoreTopVO> searchQueryTopLikedStore(Integer topNum) {
+        return storeLikedRepository.searchQueryTopLikedStore(topNum);
     }
 
     /**
