@@ -40,6 +40,7 @@ public class TestDB {
     @Transactional
     @RequiredArgsConstructor
     static class InitService {
+
         private final EntityManager em;
 
         @Autowired
@@ -397,7 +398,6 @@ public class TestDB {
             order2.addOrderItem(orderItem3);
             order2.addOrderItem(orderItem4);
 
-
             /**
              * 리뷰
              */
@@ -417,7 +417,7 @@ public class TestDB {
                     .rating(1)
                     .order(order2)
                     .user(consumer)
-                    .reviewStatus(ReviewStatus.DISABLE)
+                    .reviewStatus(ReviewStatus.ENABLE)
                     .build();
             save(userReviews2);
 

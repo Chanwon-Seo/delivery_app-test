@@ -6,6 +6,9 @@ import com.sparta.delivery_app.common.globalcustomexception.ReviewStatusExceptio
 import com.sparta.delivery_app.domain.review.entity.ReviewStatus;
 import com.sparta.delivery_app.domain.review.entity.UserReviews;
 import com.sparta.delivery_app.domain.review.repository.UserReviewsRepository;
+import com.sparta.delivery_app.domain.review.repository.dao.UserReviewsWithManagerReviewsDao;
+import com.sparta.delivery_app.domain.user.entity.User;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +28,10 @@ public class UserReviewsAdapter {
     public UserReviews searchQueryUserReviewById(Long userReviewId) {
         return userReviewsRepository.searchQueryUserReviewById(userReviewId).orElseThrow(() ->
                 new ReviewNotFoundException(ReviewErrorCode.INVALID_REVIEW));
+    }
+
+    public List<UserReviewsWithManagerReviewsDao> searchQueryUserReviews(User user) {
+        return userReviewsRepository.searchQueryUserReviewByUser(user);
     }
 
     /**
