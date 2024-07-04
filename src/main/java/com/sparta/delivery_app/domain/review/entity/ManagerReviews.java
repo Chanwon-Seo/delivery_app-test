@@ -4,8 +4,18 @@ import com.sparta.delivery_app.domain.commen.BaseTimeEntity;
 import com.sparta.delivery_app.domain.review.dto.request.ManagerReviewAddRequestDto;
 import com.sparta.delivery_app.domain.review.dto.request.ManagerReviewModifyRequestDto;
 import com.sparta.delivery_app.domain.user.entity.User;
-import jakarta.persistence.*;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,7 +32,7 @@ public class ManagerReviews extends BaseTimeEntity {
     @Column(name = "manager_reviews_id")
     private Long id;
 
-    @Column(name = "contnet", nullable = false)
+    @Column(nullable = false)
     private String content;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -39,7 +49,8 @@ public class ManagerReviews extends BaseTimeEntity {
 
 
     @Builder
-    public ManagerReviews(Long id, String content, UserReviews userReviews, User user, ManagerReviewsStatus managerReviewsStatus) {
+    public ManagerReviews(Long id, String content, UserReviews userReviews, User user,
+            ManagerReviewsStatus managerReviewsStatus) {
         this.id = id;
         this.content = content;
         this.userReviews = userReviews;
@@ -47,7 +58,8 @@ public class ManagerReviews extends BaseTimeEntity {
         this.managerReviewsStatus = managerReviewsStatus;
     }
 
-    public static ManagerReviews saveManagerReview(UserReviews userReviews, User user, ManagerReviewAddRequestDto requestDto) {
+    public static ManagerReviews saveManagerReview(UserReviews userReviews, User user,
+            ManagerReviewAddRequestDto requestDto) {
         return ManagerReviews.builder()
                 .content(requestDto.content())
                 .userReviews(userReviews)
