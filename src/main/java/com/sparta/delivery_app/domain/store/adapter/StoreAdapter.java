@@ -1,5 +1,7 @@
 package com.sparta.delivery_app.domain.store.adapter;
 
+import static com.sparta.delivery_app.common.exception.errorcode.StoreErrorCode.DUPLICATED_STORE_BUSINESS_NUMBER;
+
 import com.sparta.delivery_app.common.exception.errorcode.StoreErrorCode;
 import com.sparta.delivery_app.common.globalcustomexception.StoreDuplicatedException;
 import com.sparta.delivery_app.common.globalcustomexception.StoreNotFoundException;
@@ -8,13 +10,10 @@ import com.sparta.delivery_app.domain.store.dto.request.RegisterStoreRequestDto;
 import com.sparta.delivery_app.domain.store.entity.Store;
 import com.sparta.delivery_app.domain.store.repository.StoreRepository;
 import com.sparta.delivery_app.domain.user.entity.User;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
-
-import static com.sparta.delivery_app.common.exception.errorcode.StoreErrorCode.DUPLICATED_STORE_BUSINESS_NUMBER;
 
 @Component
 @RequiredArgsConstructor
@@ -41,7 +40,8 @@ public class StoreAdapter {
     public void queryStoreHistory(User user) {
         storeRepository.findStoreByUser(user)
                 .ifPresent(s -> {
-                    throw new StoreRegisteredHistoryException(StoreErrorCode.STORE_REGISTERED_HISTORY);
+                    throw new StoreRegisteredHistoryException(
+                            StoreErrorCode.STORE_REGISTERED_HISTORY);
                 });
     }
 
@@ -82,4 +82,5 @@ public class StoreAdapter {
 
         return store.get();
     }
+
 }

@@ -5,6 +5,7 @@ import com.sparta.delivery_app.common.globalcustomexception.MenuNotFoundExceptio
 import com.sparta.delivery_app.domain.menu.entity.Menu;
 import com.sparta.delivery_app.domain.menu.entity.MenuStatus;
 import com.sparta.delivery_app.domain.menu.repository.MenuRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,7 @@ public class MenuAdapter {
 
     /**
      * 메뉴 등록
+     *
      * @param menu
      */
     public void saveMenu(Menu menu) {
@@ -26,6 +28,7 @@ public class MenuAdapter {
 
     /**
      * 메뉴 id, 상태 검증
+     *
      * @param menuId
      * @return menu
      */
@@ -37,6 +40,7 @@ public class MenuAdapter {
 
     /**
      * 메뉴 id 검증
+     *
      * @param menuId
      * @return menu
      */
@@ -46,6 +50,7 @@ public class MenuAdapter {
 
     /**
      * 메뉴 id 검증
+     *
      * @param menuId
      * @return menu
      */
@@ -56,6 +61,7 @@ public class MenuAdapter {
 
     /**
      * 특정 매장의 메뉴 조회
+     *
      * @param storeId
      * @param pageable
      * @return
@@ -68,4 +74,7 @@ public class MenuAdapter {
         menuRepository.delete(menu);
     }
 
+    public List<Menu> searchQueryOrderItemByOrderId(Long orderId) {
+        return menuRepository.searchQueryOrderItemByOrderId(orderId);
+    }
 }

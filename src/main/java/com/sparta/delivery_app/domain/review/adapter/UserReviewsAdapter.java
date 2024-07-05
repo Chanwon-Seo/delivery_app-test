@@ -6,10 +6,15 @@ import com.sparta.delivery_app.common.globalcustomexception.ReviewStatusExceptio
 import com.sparta.delivery_app.domain.review.entity.ReviewStatus;
 import com.sparta.delivery_app.domain.review.entity.UserReviews;
 import com.sparta.delivery_app.domain.review.repository.UserReviewsRepository;
+import com.sparta.delivery_app.domain.review.repository.dao.ReviewsFilterDao;
 import com.sparta.delivery_app.domain.review.repository.dao.UserReviewsWithManagerReviewsDao;
+import com.sparta.delivery_app.domain.store.dto.request.StoreReviewsSearchCondition;
+import com.sparta.delivery_app.domain.store.entity.Store;
 import com.sparta.delivery_app.domain.user.entity.User;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -32,6 +37,12 @@ public class UserReviewsAdapter {
 
     public List<UserReviewsWithManagerReviewsDao> searchQueryUserReviews(User user) {
         return userReviewsRepository.searchQueryUserReviewByUser(user);
+    }
+
+    public Page<ReviewsFilterDao> searchQueryReviewsFilterPage(
+            StoreReviewsSearchCondition storeReviewsDto, Store findStore, Pageable pageable) {
+        return userReviewsRepository.searchQueryReviewsFilterPage(storeReviewsDto, findStore,
+                pageable);
     }
 
     /**
@@ -68,5 +79,6 @@ public class UserReviewsAdapter {
     public void deleteTempReview(UserReviews tempReview) {
         userReviewsRepository.delete(tempReview);
     }
+
 
 }
