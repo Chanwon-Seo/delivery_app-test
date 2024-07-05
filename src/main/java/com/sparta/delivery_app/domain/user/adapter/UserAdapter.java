@@ -1,5 +1,8 @@
 package com.sparta.delivery_app.domain.user.adapter;
 
+import static com.sparta.delivery_app.common.exception.errorcode.UserErrorCode.DUPLICATED_USER;
+import static com.sparta.delivery_app.common.exception.errorcode.UserErrorCode.NOT_SIGNED_UP_USER;
+
 import com.sparta.delivery_app.common.globalcustomexception.UserDuplicatedException;
 import com.sparta.delivery_app.common.globalcustomexception.UserNotExistException;
 import com.sparta.delivery_app.domain.user.entity.User;
@@ -9,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-
-import static com.sparta.delivery_app.common.exception.errorcode.UserErrorCode.*;
 
 @Component
 @RequiredArgsConstructor
@@ -37,9 +38,7 @@ public class UserAdapter {
     }
 
     /**
-     * JPA
-     * 특정 email 조회
-     * Status
+     * JPA 특정 email 조회 Status
      */
     public User queryUserByEmailAndStatus(String email) {
         User user = userRepository.findByEmail(email)

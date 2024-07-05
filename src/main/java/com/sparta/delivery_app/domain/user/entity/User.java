@@ -7,25 +7,35 @@ import com.sparta.delivery_app.domain.review.entity.UserReviews;
 import com.sparta.delivery_app.domain.user.dto.request.ConsumersSignupRequestDto;
 import com.sparta.delivery_app.domain.user.dto.request.ManagersSignupRequestDto;
 import com.sparta.delivery_app.domain.user.dto.request.UserProfileModifyRequestDto;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "user")
 public class User extends BaseTimeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
 
+    @NotNull
     @Column(nullable = false)
     private String email;
 
@@ -62,7 +72,8 @@ public class User extends BaseTimeEntity {
     private String refreshToken;
 
     @Builder
-    public User(String email, String name, String nickName, String userAddress, UserStatus userStatus, UserRole userRole) {
+    public User(String email, String name, String nickName, String userAddress,
+            UserStatus userStatus, UserRole userRole) {
         this.email = email;
         this.name = name;
         this.nickName = nickName;

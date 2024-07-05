@@ -5,6 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class RestApiResponse<T> {
+
     private final boolean success;
     private final int code;
     private final String message;
