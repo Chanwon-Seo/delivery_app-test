@@ -9,19 +9,20 @@ import com.sparta.delivery_app.domain.review.repository.UserReviewsRepository;
 import com.sparta.delivery_app.domain.store.adapter.StoreAdapter;
 import com.sparta.delivery_app.domain.store.entity.Store;
 import com.sparta.delivery_app.domain.store.entity.StoreStatus;
+import com.sparta.delivery_app.domain.store.repository.StoreQueryRepository;
 import com.sparta.delivery_app.domain.store.repository.StoreRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class OpenApiAdapter {
 
     private final StoreRepository storeRepository;
+    private final StoreQueryRepository storeQueryRepository;
     private final StoreAdapter storeAdapter;
     private final UserReviewsRepository userReviewsRepository;
     private final StoreLikedAdapter storeLikedAdapter;

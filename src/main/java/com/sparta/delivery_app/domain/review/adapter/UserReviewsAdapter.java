@@ -5,6 +5,7 @@ import com.sparta.delivery_app.common.globalcustomexception.ReviewNotFoundExcept
 import com.sparta.delivery_app.common.globalcustomexception.ReviewStatusException;
 import com.sparta.delivery_app.domain.review.entity.ReviewStatus;
 import com.sparta.delivery_app.domain.review.entity.UserReviews;
+import com.sparta.delivery_app.domain.review.repository.UserReviewsQueryRepository;
 import com.sparta.delivery_app.domain.review.repository.UserReviewsRepository;
 import com.sparta.delivery_app.domain.review.repository.dao.ReviewsFilterDao;
 import com.sparta.delivery_app.domain.review.repository.dao.UserReviewsWithManagerReviewsDao;
@@ -22,26 +23,27 @@ import org.springframework.stereotype.Component;
 public class UserReviewsAdapter {
 
     private final UserReviewsRepository userReviewsRepository;
+    private final UserReviewsQueryRepository userReviewsQueryRepository;
 
     /**
      * QueryDsl
      */
     public boolean existsQueryUserReviewById(Long reviewId) {
-        return userReviewsRepository.existsQueryByUserReviewId(reviewId);
+        return userReviewsQueryRepository.existsQueryByUserReviewId(reviewId);
     }
 
     public UserReviews searchQueryUserReviewById(Long userReviewId) {
-        return userReviewsRepository.searchQueryUserReviewById(userReviewId).orElseThrow(() ->
+        return userReviewsQueryRepository.searchQueryUserReviewById(userReviewId).orElseThrow(() ->
                 new ReviewNotFoundException(ReviewErrorCode.INVALID_REVIEW));
     }
 
     public List<UserReviewsWithManagerReviewsDao> searchQueryUserReviews(User user) {
-        return userReviewsRepository.searchQueryUserReviewByUser(user);
+        return userReviewsQueryRepository.searchQueryUserReviewByUser(user);
     }
 
     public Page<ReviewsFilterDao> searchQueryReviewsFilterPage(
             StoreReviewsSearchCondition storeReviewsDto, Store findStore, Pageable pageable) {
-        return userReviewsRepository.searchQueryReviewsFilterPage(storeReviewsDto, findStore,
+        return userReviewsQueryRepository.searchQueryReviewsFilterPage(storeReviewsDto, findStore,
                 pageable);
     }
 

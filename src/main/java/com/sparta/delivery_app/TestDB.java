@@ -1,6 +1,7 @@
 package com.sparta.delivery_app;
 
 import com.sparta.delivery_app.domain.liked.entity.StoreLiked;
+import com.sparta.delivery_app.domain.liked.entity.UserReviewLiked;
 import com.sparta.delivery_app.domain.menu.entity.Menu;
 import com.sparta.delivery_app.domain.menu.entity.MenuStatus;
 import com.sparta.delivery_app.domain.order.entity.Order;
@@ -287,7 +288,7 @@ public class TestDB {
              */
             Menu menu = Menu.builder()
                     .store(store1)
-                    .menuName("1번 매장 음식")
+                    .menuName("1번 매장 음식1")
                     .menuPrice(10_000L)
                     .menuInfo("맛있다!")
                     .menuImagePath("image1/abc")
@@ -297,7 +298,7 @@ public class TestDB {
 
             Menu menu1 = Menu.builder()
                     .store(store1)
-                    .menuName("1번 매장 음식")
+                    .menuName("1번 매장 음식2")
                     .menuPrice(10_000L)
                     .menuInfo("맛있다!")
                     .menuImagePath("image1/abc")
@@ -403,24 +404,24 @@ public class TestDB {
              */
             UserReviews userReviews1 = UserReviews.builder()
                     .content("맛집입니다!! 강추")
-                    .reviewImagePath("")
+                    .reviewImagePath("1")
                     .rating(5)
                     .order(order1)
                     .user(consumer)
                     .reviewStatus(ReviewStatus.ENABLE)
                     .build();
             save(userReviews1);
-
+//
             UserReviews userReviews2 = UserReviews.builder()
                     .content("최악입니다!! 절대가지마")
-                    .reviewImagePath("")
+                    .reviewImagePath("kkkkkk")
                     .rating(1)
                     .order(order2)
                     .user(consumer)
                     .reviewStatus(ReviewStatus.ENABLE)
                     .build();
             save(userReviews2);
-
+//
             ManagerReviews managerReviews1 = ManagerReviews.builder()
                     .content("감사합니다~!")
                     .userReviews(userReviews1)
@@ -456,6 +457,11 @@ public class TestDB {
              *
              * 추가 데이터 내용
              */
+            UserReviewLiked build = UserReviewLiked.builder()
+                    .user(consumer)
+                    .userReviews(userReviews1)
+                    .build();
+            save(build);
         }
 
 
