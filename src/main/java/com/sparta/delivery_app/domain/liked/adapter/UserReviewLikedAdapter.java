@@ -3,6 +3,7 @@ package com.sparta.delivery_app.domain.liked.adapter;
 import com.sparta.delivery_app.common.exception.errorcode.LikedErrorCode;
 import com.sparta.delivery_app.common.globalcustomexception.LikedNotFoundException;
 import com.sparta.delivery_app.domain.liked.entity.UserReviewLiked;
+import com.sparta.delivery_app.domain.liked.repository.UserReviewLikedQueryRepository;
 import com.sparta.delivery_app.domain.liked.repository.UserReviewLikedRepository;
 import com.sparta.delivery_app.domain.liked.repository.dto.UserReviewLikedVO;
 import com.sparta.delivery_app.domain.review.entity.UserReviews;
@@ -17,9 +18,12 @@ import org.springframework.stereotype.Component;
 public class UserReviewLikedAdapter {
 
     private final UserReviewLikedRepository userReviewLikedRepository;
+    private final UserReviewLikedQueryRepository userReviewLikedQueryRepository;
 
-    public boolean existsQueryUserReviewLikedByUserAndUserReviews(User findUser, UserReviews userReviewId) {
-        return userReviewLikedRepository.existsQueryUserReviewLikedByUserAndUserReviews(findUser, userReviewId);
+    public boolean existsQueryUserReviewLikedByUserAndUserReviews(User findUser,
+            UserReviews userReviewId) {
+        return userReviewLikedQueryRepository.existsQueryUserReviewLikedByUserAndUserReviews(
+                findUser, userReviewId);
     }
 
     public void saveUserReviewLiked(UserReviewLiked userReviewLiked) {
@@ -27,15 +31,18 @@ public class UserReviewLikedAdapter {
     }
 
     public UserReviewLiked searchQueryUserReviewLikedById(Long userReviewLikedId) {
-        return userReviewLikedRepository.searchQueryUserReviewLikedById(userReviewLikedId).orElseThrow(() ->
-                new LikedNotFoundException(LikedErrorCode.LIKED_UNREGISTERED_USER_REVIEW));
+        return userReviewLikedQueryRepository.searchQueryUserReviewLikedById(userReviewLikedId)
+                .orElseThrow(() -> new LikedNotFoundException(
+                        LikedErrorCode.LIKED_UNREGISTERED_USER_REVIEW));
     }
 
     public void deleteUserReviewLiked(UserReviewLiked findUserReviewLiked) {
         userReviewLikedRepository.delete(findUserReviewLiked);
     }
 
-    public Page<UserReviewLikedVO> searchQueryUserReviewLikedByUser(User findUser, Pageable pageable) {
-        return userReviewLikedRepository.searchQueryUserReviewLikedByUser(findUser, pageable);
+    public Page<UserReviewLikedVO> searchQueryUserReviewLikedByUser(User findUser,
+            Pageable pageable) {
+        return userReviewLikedQueryRepository
+                .searchQueryUserReviewLikedByUser(findUser, pageable);
     }
 }

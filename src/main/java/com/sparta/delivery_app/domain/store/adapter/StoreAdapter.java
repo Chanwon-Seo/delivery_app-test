@@ -8,6 +8,7 @@ import com.sparta.delivery_app.common.globalcustomexception.StoreNotFoundExcepti
 import com.sparta.delivery_app.common.globalcustomexception.StoreRegisteredHistoryException;
 import com.sparta.delivery_app.domain.store.dto.request.RegisterStoreRequestDto;
 import com.sparta.delivery_app.domain.store.entity.Store;
+import com.sparta.delivery_app.domain.store.repository.StoreQueryRepository;
 import com.sparta.delivery_app.domain.store.repository.StoreRepository;
 import com.sparta.delivery_app.domain.user.entity.User;
 import java.util.Optional;
@@ -20,12 +21,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class StoreAdapter {
 
     private final StoreRepository storeRepository;
+    private final StoreQueryRepository storeQueryRepository;
 
     /**
      * QueryDsl
      */
     public Store searchQueryStoreById(Long storeId) {
-        return storeRepository.searchQueryById(storeId).orElseThrow(() ->
+        return storeQueryRepository.searchQueryById(storeId).orElseThrow(() ->
                 new StoreNotFoundException(StoreErrorCode.INVALID_STORE));
     }
 

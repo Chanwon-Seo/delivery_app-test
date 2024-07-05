@@ -7,6 +7,7 @@ import com.sparta.delivery_app.common.globalcustomexception.UserDuplicatedExcept
 import com.sparta.delivery_app.common.globalcustomexception.UserNotExistException;
 import com.sparta.delivery_app.domain.user.entity.User;
 import com.sparta.delivery_app.domain.user.entity.UserStatus;
+import com.sparta.delivery_app.domain.user.repository.UserQueryRepository;
 import com.sparta.delivery_app.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Component;
 public class UserAdapter {
 
     private final UserRepository userRepository;
+    private final UserQueryRepository userQueryRepository;
 
     public void checkDuplicateEmail(String email) {
         userRepository.findByEmail(email).ifPresent(u -> {
@@ -51,7 +53,7 @@ public class UserAdapter {
      * QueryDsl
      */
     public User searchQueryUserByEmailAndStatus(String email) {
-        User user = userRepository.searchQueryByEmail(email)
+        User user = userQueryRepository.searchQueryByEmail(email)
                 .orElseThrow(() -> new UserNotExistException(NOT_SIGNED_UP_USER));
         UserStatus.checkUserStatus(user.getUserStatus());
         return user;

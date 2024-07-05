@@ -7,8 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserReviewsRepository extends JpaRepository<UserReviews, Long>,
-        UserReviewsQueryRepository {
+public interface UserReviewsRepository extends JpaRepository<UserReviews, Long> {
 
     Optional<Long> findManagerReviewIdById(Long reviewId);
 

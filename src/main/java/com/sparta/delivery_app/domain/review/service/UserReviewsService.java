@@ -17,6 +17,7 @@ import com.sparta.delivery_app.domain.review.dto.response.UserReviewModifyRespon
 import com.sparta.delivery_app.domain.review.dto.response.UserReviewsAndManagerReviewsResponseDto;
 import com.sparta.delivery_app.domain.review.entity.ReviewStatus;
 import com.sparta.delivery_app.domain.review.entity.UserReviews;
+import com.sparta.delivery_app.domain.review.repository.UserReviewsQueryRepository;
 import com.sparta.delivery_app.domain.review.repository.dao.UserReviewsWithManagerReviewsDao;
 import com.sparta.delivery_app.domain.s3.service.S3Uploader;
 import com.sparta.delivery_app.domain.s3.util.S3Utils;
@@ -35,6 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserReviewsService {
 
     private final UserReviewsAdapter userReviewsAdaptor;
+    private final UserReviewsQueryRepository userReviewsQueryRepository;
     private final OrderAdapter orderAdaptor;
     private final UserAdapter userAdaptor;
     private final S3Uploader s3Uploader;
